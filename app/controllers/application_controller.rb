@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   attr_reader :current_account
 
+  include ControllerHelper::Render
+
   protected
   def authenticate_request!
     unless account_id_in_token?
@@ -11,25 +13,6 @@ class ApplicationController < ActionController::Base
     @current_account = Account.find(auth_token[:account_id])
   rescue JWT::VerificationError, JWT::DecodeError
     render json: { errors: ['Not Authenticated'] }, status: :unauthorized
-  end
-
-  def render_success(status_code, response_json = {})
-    render_json(status_code, response_json)
-  end
-
-  def render_error(status_code, error_code, message)
-    response_json = {
-      error: {
-        code: error_code,
-        message: message
-      }
-    }
-
-    render_json(status_code, response_json)
-  end
-
-  def render_json(status_code, response_json)
-    render status: status_code, json: response_json
   end
 
   private
