@@ -13,6 +13,25 @@ class ApplicationController < ActionController::Base
     render json: { errors: ['Not Authenticated'] }, status: :unauthorized
   end
 
+  def render_success(status_code, response_json = {})
+    render_json(status_code, response_json)
+  end
+
+  def render_error(status_code, error_code, message)
+    response_json = {
+      error: {
+        code: error_code,
+        message: message
+      }
+    }
+
+    render_json(status_code, response_json)
+  end
+
+  def render_json(status_code, response_json)
+    render status: status_code, json: response_json
+  end
+
   private
   def http_token
       @http_token ||= if request.headers['Authorization'].present?
