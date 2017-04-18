@@ -1,10 +1,17 @@
 class Account < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+  devise :database_authenticatable, :registerable, :validatable
 
   has_many :memos
+
+  def sign_in
+    update(is_signed_in: true)
+  end
+
+  def sign_out
+    update(is_signed_in: false)
+  end
 
   def self.find_account(email, password)
     user = self.find_by(email: email)
