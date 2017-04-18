@@ -8,4 +8,8 @@ class JsonWebToken
   rescue
     nil
   end
+
+  def self.get_token(account)
+    encode(account_id: account.id)
+  end
 end

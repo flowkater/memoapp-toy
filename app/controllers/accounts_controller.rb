@@ -2,9 +2,9 @@ class AccountsController < ApplicationController
     before_action :authenticate_request!, only: [:logout]
 
     def signup
-        render_error 422, 1, 'E-mail 형식을 확인하세요' if !(params[:email].present? && /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match(params[:email]))
-        render_error 422, 2, '비밀번호는 8자리 이상이어야 합니다.' if !params[:password].present? || params[:password].length < 8
-        render_error 422, 3, 'E-mail이 이미 존재합니다.' if Account.find_by(email: params[:email]).present?
+        return render_error 422, 1, 'E-mail 형식을 확인하세요' if !(params[:email].present? && /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match(params[:email]))
+        return render_error 422, 2, '비밀번호는 8자리 이상이어야 합니다.' if !params[:password].present? || params[:password].length < 8
+        return render_error 422, 3, 'E-mail이 이미 존재합니다.' if Account.find_by(email: params[:email]).present?
 
         account = Account.create!(account_param)
 
@@ -16,7 +16,7 @@ class AccountsController < ApplicationController
 
         account.sign_in
 
-        render_success :ok, { account: account } if account.present?
+        render_success :ok, { account: account, auth_token: JsonWebToken.get_token(account) } if account.present?
     end
 
     def logout
