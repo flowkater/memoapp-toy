@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :accounts
   get 'hello_world', to: 'hello_world#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -11,4 +12,6 @@ Rails.application.routes.draw do
   get 'memos', to: 'memos#index'
   delete 'memos/:id', to: 'memos#destroy'
   patch 'memos/:id', to: 'memos#update'
+
+  post 'auth_account', to: 'authentication#authenticate_account'
 end
