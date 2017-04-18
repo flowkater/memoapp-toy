@@ -1,10 +1,7 @@
 import React, { PropTypes } from 'react';
+import axios from 'axios';
 
 export default class HelloWorld extends React.Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired, // this is passed from the Rails view
-  };
-
   /**
    * @param props - Comes from your rails view.
    * @param _railsContext - Comes from React on Rails
@@ -30,7 +27,7 @@ export default class HelloWorld extends React.Component {
         <hr />
         <form >
           <label htmlFor="name">
-            Say hello to:
+            수정asdasdasdadsasdasd:
           </label>
           <input
             id="name"

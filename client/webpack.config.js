@@ -16,7 +16,7 @@ const config = {
   ],
 
   output: {
-    filename: 'webpack-bundle.js',
+    filename: '',
     path: pathLib.resolve(__dirname, '../app/assets/webpack'),
   },
 
@@ -43,6 +43,10 @@ const config = {
         use: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/,
+        loader: 'style!css-loader'
+      }
     ],
   },
 };

@@ -1,5 +1,5 @@
 {
-  "name": "react-webpack-rails-tutorial",
+  "name": "memoapp",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -7,9 +7,15 @@
     "npm": "4.1.1"
   },
   "scripts": {
-    "build:test": "webpack --config webpack.config.js",
-    "build:production": "NODE_ENV=production webpack --config webpack.config.js",
-    "build:development": "webpack -w --config webpack.config.js"
+    "test": "yarn run build:test && rspec",
+    "build:test": "yarn run build:client && yarn run build:server",
+    "build:production:client": "NODE_ENV=production webpack --config webpack.client.rails.build.config.js",
+    "build:production:server": "NODE_ENV=production webpack --config webpack.server.rails.build.config.js",
+    "build:client": "webpack --config webpack.client.rails.build.config.js",
+    "build:dev:client": "webpack -w --config webpack.client.rails.build.config.js",
+    "build:dev:server": "webpack -w --config webpack.server.rails.build.config.js",
+    "build:server": "webpack --config webpack.server.rails.build.config.js",
+    "hot-assets": "babel-node server-rails-hot.js"
   },
   "cacheDirectories": ["node_modules", "client/node_modules"],
   "dependencies": {
@@ -22,13 +28,36 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-2": "^6.22.0",
     "es5-shim": "^4.5.9",
+    "extract-text-webpack-plugin": "^2.1.0",
     "expose-loader": "^0.7.3",
     "imports-loader": "^0.7.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-on-rails": "6.9.3",
-    "webpack": "^2.3.1"
+    "webpack": "^2.3.1",
+    "jquery": "^3.1.1",
+    "jquery-ujs": "^1.2.2",
+    "axios": "^0.16.1",
+    "css-loader": "^0.28.0",
+    "immutability-helper": "^2.1.2",
+    "react-addons-update": "^15.5.2",
+    "react-hot-loader": "^1.3.1",
+    "react-redux": "^5.0.4",
+    "react-router": "^4.1.1",
+    "react-timeago": "^3.2.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "style-loader": "^0.16.1",
+    "sass-loader": "^6.0.3",
+    "sass-resources-loader": "1.2.1",
+    "url-loader": "^0.5.8",
+    "node-sass": "^4.5.2",
+    "postcss-loader": "^1.3.3",
+    "resolve-url-loader": "^2.0.2"
   },
   "devDependencies": {
+    "babel-plugin-react-transform": "^2.0.2",
+    "react-transform-hmr": "^1.0.4",
+    "webpack-dev-server": "^1.16.2"
   }
 }
