@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   protected
   def authenticate_request!
     unless account_id_in_token?
-      render json: { errors: ['Not Authenticated'] }, status: :unauthorized
+      render_error :unauthorized, 401, 'Not Authenticated'
       return
     end
     @current_account = Account.find(auth_token[:account_id])

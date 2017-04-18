@@ -4,17 +4,17 @@ class AuthenticationController < ApplicationController
     if account && account.valid_password?(params[:password])
       render json: payload(account)
     else
-      render json: {errors: ['Invalid Username/Password']}, status: :unauthorized
+      render json: { errors: ['Invalid E-mail/Password'] }, status: :unauthorized
     end
   end
 
   private
 
   def payload(account)
-    return nil unless account and account.id
+    return nil unless account && account.id
     {
-      auth_token: JsonWebToken.encode({account_id: account.id}),
-      account: {id: account.id, email: account.email}
+      auth_token: JsonWebToken.encode(account_id: account.id),
+      account: { id: account.id, email: account.email }
     }
   end
 end

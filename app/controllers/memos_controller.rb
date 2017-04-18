@@ -3,44 +3,47 @@ class MemosController < ApplicationController
 
   # POST /api/memos
   def create
-    return render status: 400, json: { error: 'Empty Contents', code: 2 } unless params[:contents].present?
-    memo.create(memo_param)
+    return render_error(400, 2, 'content는 필수') unless params[:content].present?
 
-    render status: 201, json: { success: true }
+    memo = current_account.memos.create!(memo_param)
+
+    render_success 201, { memo: memo.as_json }
   end
 
   # GET /api/memos
   def index
-    memos = Memo.all
+    memos = current_account.memos.all
 
-    render status: :ok, json: { memos: memos.as_json }
+    render_success :ok, { memos: memos.as_json }
   end
 
   # DELETE /api/memos/:id
   def destroy
-    return render status: 400, json: { error: 'Invalid ID', code: 1 } unless /\d+/.match(params[:id].to_i)
-    return render status: 403, json: { error: 'Empty Content', code: 2 } unless params[:content].present?
-    return render status: 404, json: { error: 'No Resource', code: 3 } unless memo = Memo.find_by(id: params[:id]).present?
-    return render status: 403, json: { error: 'Permision Failure', code: 4 } # TODO: unless memo.account_id == session_id
+    return render_error 400, 1, 'Invalid ID' unless /\d+/.match(params[:id].to_s)
+    return render_error 404, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
+    return render_error 403, 4, 'Permision Failure' unless memo.account_id == current_account.id
 
-    render status: 201, json: { success: true }
+    memo.destroy!
+
+    render_success :ok, { memo: memo.as_json }
   end
 
   # PATCH /api/memos/:id
   def update
-    return render status: 400, json: { error: 'Invalid ID', code: 1 } unless /\d+/.match(params[:id].to_i)
-    return render status: 403, json: { error: 'Empty Contents', code: 2 } unless params[:content].present?
-    return render status: 404, json: { error: 'No Resource', code: 3 } unless memo = Memo.find_by(id: params[:id]).present?
-    return render status: 403, json: { error: 'Permision Failure', code: 4 } # TODO: unless memo.account_id == session_id
+    return render_error 400, 1, 'Invalid ID' unless /\d+/.match(params[:id].to_s)
+    return render_error 403, 2, 'Empty Contents' unless params[:content].present?
+    return render_error 404, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
+    return render_error 403, 4, 'Permision Failure' unless memo.account_id == current_account.id
 
-    memo = Memo.find(params[:id])
     memo.update(memo_param.merge(is_edited: true))
+
     render status: 201, json: { success: true, memo: memo.as_json }
   end
 
   private
-
   def memo_param
-    { content: params[:content] }
+    {
+      content: params[:content]
+    }
   end
 end
