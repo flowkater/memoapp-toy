@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
       render_error :unauthorized, 401, 'Not Authenticated'
       return
     end
-    @current_account = Account.find(auth_token[:account_id])
+    @current_account = Account.where(is_signed_in: true).find(auth_token[:account_id])
   rescue JWT::VerificationError, JWT::DecodeError
     render json: { errors: ['Not Authenticated'] }, status: :unauthorized
   end

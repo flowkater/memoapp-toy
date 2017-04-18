@@ -14,13 +14,13 @@ class AccountsController < ApplicationController
     def signin
         return render_error 422, 1, '로그인에 실패 했습니다.' unless account = Account.find_account(params[:email], params[:password])
 
-        # TODO: sign in true 처리
+        account.sign_in
 
         render_success :ok, { account: account } if account.present?
     end
 
     def logout
-        # TODO: sign in false 처리
+        current_account.sign_out
 
         render_success :ok, { account: current_account }
     end
