@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   get 'memos', to: 'memos#index'
   delete 'memos/:id', to: 'memos#destroy'
   patch 'memos/:id', to: 'memos#update'
+
+  post 'auth_account', to: 'authentication#authenticate_account'
 end

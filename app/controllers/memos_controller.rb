@@ -1,6 +1,5 @@
 class MemosController < ApplicationController
-  # before_action :authenticate_user!
-  before_action :authenticate_account
+  before_action :authenticate_request!
 
   # POST /api/memos
   def create
