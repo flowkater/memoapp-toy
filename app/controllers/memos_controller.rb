@@ -12,7 +12,13 @@ class MemosController < ApplicationController
 
   # GET /api/memos
   def index
-    memos = current_account.memos.all
+    count = params[:count] || 6
+    before_id = params[:before_id]
+    memos = if before_id.present?
+      current_account.memos.where('id < ?', before_id).order(id: :desc).limit(count)
+    else
+      current_account.memos.order(id: :desc).limit(count)
+    end
 
     render_success :ok, { memos: memos.as_json }
   end
@@ -20,8 +26,8 @@ class MemosController < ApplicationController
   # DELETE /api/memos/:id
   def destroy
     return render_error 400, 1, 'Invalid ID' unless /\d+/.match(params[:id].to_s)
-    return render_error 404, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
-    return render_error 403, 4, 'Permision Failure' unless memo.account_id == current_account.id
+    return render_error 422, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
+    return render_error 422, 4, 'Permision Failure' unless memo.account_id == current_account.id
 
     memo.destroy!
 
@@ -31,9 +37,9 @@ class MemosController < ApplicationController
   # PATCH /api/memos/:id
   def update
     return render_error 400, 1, 'Invalid ID' unless /\d+/.match(params[:id].to_s)
-    return render_error 403, 2, 'Empty Contents' unless params[:content].present?
-    return render_error 404, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
-    return render_error 403, 4, 'Permision Failure' unless memo.account_id == current_account.id
+    return render_error 422, 2, 'Empty Content' unless params[:content].present?
+    return render_error 422, 3, 'No Resource' unless memo = Memo.find_by(id: params[:id])
+    return render_error 422, 4, 'Permision Failure' unless memo.account_id == current_account.id
 
     memo.update(memo_param.merge(is_edited: true))
 
