@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  content: MyString
+  is_edited: false
+
+two:
+  account: two
+  content: MyString
+  is_edited: false
