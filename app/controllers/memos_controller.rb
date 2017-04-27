@@ -7,7 +7,10 @@ class MemosController < ApplicationController
 
     memo = current_account.memos.create!(memo_param)
 
-    render_success 201, memo: memo.as_json
+    memo_json = memo.as_json
+    memo_json['contents'] = memo_json.delete('content')
+
+    render_success 201, memo: memo_json
   end
 
   # GET /api/memos
@@ -20,7 +23,12 @@ class MemosController < ApplicationController
               current_account.memos.order(id: :desc).limit(count)
     end
 
-    render_success :ok, memos: memos.as_json
+    memos_json = memos.as_json.map do |memo_json|
+      memo_json['contents'] = memo_json.delete('content')
+      memo_json
+    end
+
+    render_success :ok, memos: memos_json
   end
 
   # DELETE /api/memos/:id
@@ -31,7 +39,10 @@ class MemosController < ApplicationController
 
     memo.destroy!
 
-    render_success :ok, memo: memo.as_json
+    memo_json = memo.as_json
+    memo_json['contents'] = memo_json.delete('content')
+
+    render_success :ok, memo: memo_json
   end
 
   # PATCH /api/memos/:id
@@ -43,7 +54,10 @@ class MemosController < ApplicationController
 
     memo.update(memo_param.merge(is_edited: true))
 
-    render status: 200, json: { memo: memo.as_json }
+    memo_json = memo.as_json
+    memo_json['contents'] = memo_json.delete('content')
+
+    render status: 200, json: { memo: memo_json }
   end
 
   private
@@ -62,7 +76,7 @@ class MemosController < ApplicationController
 
   def memo_param
     {
-      content: params[:content]
+      content: params[:contents]
     }
   end
 end
