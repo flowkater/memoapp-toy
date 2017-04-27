@@ -2,7 +2,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   attr_reader :current_account
 
+  before_action :set_cors_headers
+
   protected
+  def set_cors_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
+
   def authenticate_request!
     unless account_id_in_token?
       render_error :unauthorized, 401, 'Not Authenticated'
