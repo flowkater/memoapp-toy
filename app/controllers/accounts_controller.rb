@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-    before_action :authenticate_request!, only: [:logout]
+    before_action :authenticate_request!, only: [:logout, :getinfo]
 
     def signup
         return render_error 422, 1, 'E-mail 형식을 확인하세요' if !(params[:email].present? && /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match(params[:email]))
@@ -23,6 +23,12 @@ class AccountsController < ApplicationController
         current_account.sign_out
 
         render_success :ok, { account: current_account }
+    end
+
+    def getinfo
+      return render_error 422, 1, 'No Session' unless JsonWebToken.get_token(current_account) == http_token
+
+      render_success :ok, { auth_token: JsonWebToken.get_token(current_account) }
     end
 
     private

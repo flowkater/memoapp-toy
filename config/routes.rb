@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post 'api/signup', to: 'accounts#signup'
   post 'api/signin', to: 'accounts#signin'
   delete 'api/logout', to: 'accounts#logout'
+  get 'api/getinfo', to: 'accounts#getinfo'
 
   post 'api/memos', to: 'memos#create'
   get 'api/memos', to: 'memos#index'
