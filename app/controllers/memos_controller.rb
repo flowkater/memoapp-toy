@@ -25,9 +25,9 @@ class MemosController < ApplicationController
 
   # DELETE /api/memos/:id
   def destroy
-    return render_error 400, 1, 'Invalid ID' unless match_regex_id
-    return render_error 422, 3, 'No Resource' unless memo = find_memo
-    return render_error 422, 4, 'Permision Failure' unless memo.account_id == current_account.id
+    return render_error 400, 1, 'id의 형식이 잘못됨' unless match_regex_id
+    return render_error 422, 3, '해당 id에 대한 리소스가 없음' unless memo = find_memo
+    return render_error 422, 4, '권한없음' unless memo.account_id == current_account.id
 
     memo.destroy!
 
@@ -36,14 +36,14 @@ class MemosController < ApplicationController
 
   # PATCH /api/memos/:id
   def update
-    return render_error 400, 1, 'Invalid ID' unless match_regex_id
-    return render_error 422, 2, 'Empty Content' unless content_present?
-    return render_error 422, 3, 'No Resource' unless memo = find_memo
-    return render_error 422, 4, 'Permision Failure' unless memo.account_id == current_account.id
+    return render_error 400, 1, 'id의 형식이 잘못됨' unless match_regex_id
+    return render_error 422, 2, 'content는 필수' unless content_present?
+    return render_error 422, 3, '해당 id에 대한 리소스가 없음' unless memo = find_memo
+    return render_error 422, 4, '권한없음' unless memo.account_id == current_account.id
 
     memo.update(memo_param.merge(is_edited: true))
 
-    render status: 201, json: { success: true, memo: memo.as_json }
+    render status: 200, json: { memo: memo.as_json }
   end
 
   private
