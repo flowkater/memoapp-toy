@@ -3,7 +3,7 @@ class MemosController < ApplicationController
 
   # POST /api/memos
   def create
-    return render_error(400, 2, 'content는 필수') unless content_present?
+    return render_error(400, 2, 'contents is required') unless content_present?
 
     memo = current_account.memos.create!(memo_param)
 
