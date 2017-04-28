@@ -63,7 +63,7 @@ class MemosController < ApplicationController
   private
 
   def content_present?
-    params[:content].present?
+    params[:contents].present?
   end
 
   def match_regex_id
