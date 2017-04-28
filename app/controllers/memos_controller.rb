@@ -8,7 +8,7 @@ class MemosController < ApplicationController
     memo = current_account.memos.create!(memo_param)
 
     memo_json = memo.as_json
-    memo_json['writer'] = Account.find_by(id: memo_json.delete('account_id')).try(:email)
+    memo_json['writer'] = Account.find_by(id: memo_json['account_id']).try(:email)
     memo_json['contents'] = memo_json.delete('content')
 
     render_success 201, memo: memo_json
@@ -25,7 +25,7 @@ class MemosController < ApplicationController
     end
 
     memos_json = memos.as_json.map do |memo_json|
-      memo_json['writer'] = Account.find_by(id: memo_json.delete('account_id')).try(:email)
+      memo_json['writer'] = Account.find_by(id: memo_json['account_id']).try(:email)
       memo_json['contents'] = memo_json.delete('content')
       memo_json
     end
@@ -42,7 +42,7 @@ class MemosController < ApplicationController
     memo.destroy!
 
     memo_json = memo.as_json
-    memo_json['writer'] = Account.find_by(id: memo_json.delete('account_id')).try(:email)
+    memo_json['writer'] = Account.find_by(id: memo_json['account_id']).try(:email)
     memo_json['contents'] = memo_json.delete('content')
 
     render_success :ok, memo: memo_json
@@ -58,7 +58,7 @@ class MemosController < ApplicationController
     memo.update(memo_param.merge(is_edited: true))
 
     memo_json = memo.as_json
-    memo_json['writer'] = Account.find_by(id: memo_json.delete('account_id')).try(:email)
+    memo_json['writer'] = Account.find_by(id: memo_json['account_id']).try(:email)
     memo_json['contents'] = memo_json.delete('content')
 
     render status: 200, json: { memo: memo_json }
