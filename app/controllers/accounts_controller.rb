@@ -28,7 +28,7 @@ class AccountsController < ApplicationController
     def getinfo
       return render_error 422, 1, 'No Session' unless JsonWebToken.get_token(current_account) == http_token
 
-      render_success :ok, { auth_token: JsonWebToken.get_token(current_account) }
+      render_success :ok, { account: current_account, auth_token: JsonWebToken.get_token(current_account) }
     end
 
     private

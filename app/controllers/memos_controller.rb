@@ -19,9 +19,9 @@ class MemosController < ApplicationController
     count = params[:count] || 6
     before_id = params[:before_id]
     memos = if before_id.present?
-              current_account.memos.where('id < ?', before_id).order(id: :desc).limit(count)
+              Memo.where('id < ?', before_id).order(id: :desc).limit(count)
             else
-              current_account.memos.order(id: :desc).limit(count)
+              Memo.order(id: :desc).limit(count)
     end
 
     memos_json = memos.as_json.map do |memo_json|
