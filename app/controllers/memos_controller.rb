@@ -18,8 +18,14 @@ class MemosController < ApplicationController
   def index
     count = params[:count] || 6
     before_id = params[:before_id]
+    after_id = params[:after_id]
+
+    return render_error(400, 5, 'before_id and after_id is cannot present both.') if before_id.present? && after_id.present?
+
     memos = if before_id.present?
               Memo.where('id < ?', before_id).order(id: :desc).limit(count)
+            elsif after_id.present?
+              Memo.where('id > ?', after_id).order(id: :desc)
             else
               Memo.order(id: :desc).limit(count)
     end
