@@ -62,3 +62,4 @@ gem 'devise'
 gem 'jwt'
 
 gem 'rack-cors'
+gem 'acts_as_votable', '~> 0.10.0'
