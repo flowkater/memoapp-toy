@@ -1,5 +1,14 @@
 class AccountsController < ApplicationController
-    before_action :authenticate_request!, only: [:logout, :getinfo]
+    before_action :authenticate_request!, only: [:logout, :getinfo, :search]
+
+    def search
+      return render_error 422, 6, 'E-mail은 필수' unless email_param.present?
+
+      email_query = "%"+email_param+"%"
+      accounts = Account.where("email LIKE ?", email_query)
+
+      render_success :ok, { accounts: accounts }
+    end
 
     def signup
         return render_error 422, 1, 'E-mail 형식을 확인하세요' if !(params[:email].present? && /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match(params[:email]))
@@ -32,6 +41,10 @@ class AccountsController < ApplicationController
     end
 
     private
+    def email_param
+        params[:email]
+    end
+
     def account_param
         {
             email: params[:email],

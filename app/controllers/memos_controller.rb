@@ -70,6 +70,20 @@ class MemosController < ApplicationController
     render status: 200, json: { memo: memo_json }
   end
 
+  def create_upvotes
+    return render_error 422, 3, '해당 id에 대한 리소스가 없음' unless memo = find_memo
+    memo.upvote_from(current_account)
+
+    render status: 200, json: {}
+  end
+
+  def destroy_upvotes
+    return render_error 422, 3, '해당 id에 대한 리소스가 없음' unless memo = find_memo
+    memo.unvote_up(current_account)
+
+    render status: 200, json: {}
+  end
+
   private
 
   def content_present?
